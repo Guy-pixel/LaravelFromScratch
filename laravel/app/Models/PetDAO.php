@@ -9,4 +9,8 @@ class Pet extends User
         'Breed',
         'Neutered',
     ];
+    public static function getByID($id){
+        $sql = "SELECT * FROM Pets WHERE ID =" . $id . "";
+    }
+    
 }
