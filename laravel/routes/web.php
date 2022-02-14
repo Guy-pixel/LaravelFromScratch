@@ -21,7 +21,8 @@ Route::get('posts/{post}', function($slug){
     
 
     if(! file_exists($path)){
-
+        return redirect('/');
+        dd("404");
     }
     $post = file_get_contents($path);
 
