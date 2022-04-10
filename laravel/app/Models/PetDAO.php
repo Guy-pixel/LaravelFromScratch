@@ -2,30 +2,6 @@
 
 use App\Models\User;
 
-class Pet extends User
-{
-    protected $fillable = [
-        'Species',
-        'Breed',
-        'Neutered',
-    ];
-    public static function outputFillable($fillable)
-    {
-
-        $output=[];
-        foreach($fillable as $variableName){
-            array_push($output, $variableName);
-
-        }
-        return $output;
-        
-    }
-    public static function getByID($id)
-    {
-        $sql = "SELECT * FROM Pets WHERE ID =" . $id . "";
-    }
-}
-
 
 class Product
 {
@@ -39,5 +15,14 @@ class Product
         $this->description = $description;
         $this->price = $price;
     }
+    public function outputFillable()
+    {
+        $fillable = [];
+        foreach ($this->fillable as $key => $value) {
+            $fillable+=[$key, $value];
+        }
+    }
 }
 $product1 = new Product("iPhone 12", "The 12th Version of the iPhone", 999.99);
+
+$product1.outputFillable();
