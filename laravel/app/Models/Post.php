@@ -38,5 +38,6 @@ class Post
     }
     public static function getURL($slug)
     {
+
     }
 }

@@ -17,18 +17,28 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 */
 
 Route::get('/', function () {
+    function date_sort($a, $b){
+        if($a == $b){
+            return 0;
+        } else {
+        return $a <=> $b;
+        }
+    }
     $files = File::files(resource_path("posts"));
     $posts = [];
     foreach ($files as $file) {
         $document = YamlFrontMatter::parseFile($file);
-        $posts[] = new Post(
-            $document->title,
-            $document->excerpt,
-            $document->date,
-            $document->body(),
-            $document->slug
-        );
+        $posts[] = [$document->date => 
+            new Post(
+                $document->title,
+                $document->excerpt,
+                $document->date,
+                $document->body(),
+                $document->slug      
+            )
+        ];
     }
+    asort($posts, SORT_NUMERIC);
     return view('posts', ['posts' => $posts]);
 
 
