@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
 use App\Models\Post;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
+use Illuminate\Support\Collection;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,18 +18,22 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 */
 
 Route::get('/', function () {
-    $files = File::files(resource_path("posts"));
-    $posts = [];
-    foreach ($files as $file) {
-        $document = YamlFrontMatter::parseFile($file);
-        $posts[] = new Post(
-            $document->title,
-            $document->excerpt,
-            $document->date,
-            $document->body(),
-            $document->slug
-        );
-    }
+    $posts = Post::all();
+
+
+
+    // // Array mapping to mapping everything being passed to $file from $files to $posts
+    // $posts = array_map(function ($file) {
+    //     $document = YamlFrontMatter::parseFile($file);
+    //     // return a post which pulls from the document all info
+    //     return new Post(
+    //         $document->title,
+    //         $document->excerpt,
+    //         $document->date,
+    //         $document->body(),
+    //         $document->slug
+    //     );
+    // }, $files);
     return view('posts', ['posts' => $posts]);
 
 
