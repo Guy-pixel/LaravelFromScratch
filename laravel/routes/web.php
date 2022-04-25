@@ -19,9 +19,6 @@ use Illuminate\Support\Collection;
 
 Route::get('/', function () {
     $posts = Post::all();
-
-
-
     // // Array mapping to mapping everything being passed to $file from $files to $posts
     // $posts = array_map(function ($file) {
     //     $document = YamlFrontMatter::parseFile($file);

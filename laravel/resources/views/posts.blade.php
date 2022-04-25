@@ -15,9 +15,9 @@
         foreach($posts as $post): 
     ?>
     <article>
-        <?= print_r($post); ?><br/>
+        {{-- <?= print_r($post); ?><br/> --}}
 
-        {{-- <h1>
+        <h1>
             <a href="/posts/<?= $post->slug; ?>">
                 <?= $post->title; ?>
             </a>
@@ -25,7 +25,7 @@
         <body>
             <em><?= $post->date; ?></em><br/>
             <?= $post->body; ?>
-        </body> --}}
+        </body>
 
     </article>
     <?php endforeach; ?>
