@@ -38,11 +38,11 @@ Route::get('/', function () {
     //     'posts' => Post::all(),
     // ]);
 });
-Route::get('posts/{post}', function ($slug) {
+Route::get('posts/{post}', function ($id) {
     return view(
         'post',
         [
-            'post' => Post::findOrFail($slug)
+            'post' => Post::findOrFail($id)
         ]
     );
 
