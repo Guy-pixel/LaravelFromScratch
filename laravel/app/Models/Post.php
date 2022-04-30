@@ -23,16 +23,17 @@ class Post
     }
     public static function all()
     {
-
-        return collect(File::files(resource_path("posts")))
-            ->map(fn ($file) => YamlFrontMatter::parseFile($file))
-            ->map(fn ($document) => new Post(
-                $document->title,
-                $document->excerpt,
-                $document->date,
-                $document->body(),
-                $document->slug
-            ))->sortBy('date');
+        return cache()->rememberForever('posts.all', function () {
+            return collect(File::files(resource_path("posts")))
+                ->map(fn ($file) => YamlFrontMatter::parseFile($file))
+                ->map(fn ($document) => new Post(
+                    $document->title,
+                    $document->excerpt,
+                    $document->date,
+                    $document->body(),
+                    $document->slug
+                ))->sortBy('date');
+        });
     }
     public static function find($slug)
     {
@@ -43,8 +44,13 @@ class Post
         // }
         // return cache()->remember("posts.{$slug}.html", 1200, fn () => file_get_contents($path));
     }
-    public static function getURL($slug)
+    public static function findOrFail($slug)
     {
-
+        $post = static::find($slug);
+        if (!$post) {
+            throw new ModelNotFoundException();
+        } else {
+            return $post;
+        }
     }
 }
