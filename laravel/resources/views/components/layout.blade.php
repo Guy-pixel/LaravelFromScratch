@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/app.css" />
     <script src="app.js"></script>
-    <title>Independant Learning</title>
+    <title>Laravel From Scratch</title>
 </head>
 <body>
     {{ $content }}
