@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\File;
 use App\Models\Post;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 use Illuminate\Support\Collection;
-
+use App\Models\Category;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,47 +18,23 @@ use Illuminate\Support\Collection;
 */
 
 Route::get('/', function () {
-    $posts = Post::all();
-    // // Array mapping to mapping everything being passed to $file from $files to $posts
-    // $posts = array_map(function ($file) {
-    //     $document = YamlFrontMatter::parseFile($file);
-    //     // return a post which pulls from the document all info
-    //     return new Post(
-    //         $document->title,
-    //         $document->excerpt,
-    //         $document->date,
-    //         $document->body(),
-    //         $document->slug
-    //     );
-    // }, $files);
-    return view('posts', ['posts' => $posts]);
-
-
-    // return view('posts', [
-    //     'posts' => Post::all(),
-    // ]);
+    return view('posts', [
+        'posts' => Post::latest('published_at')->with('category')->get()
+    ]);
 });
-Route::get('posts/{post}', function ($id) {
+Route::get('posts/{post}', function (Post $post) {
     return view(
         'post',
         [
-            'post' => Post::findOrFail($id)
+            'post' => $post
         ]
     );
-
-    // $path = __DIR__ . "/../resources/posts/{$slug}.html";
-
-    // if(! file_exists($path)){
-    //     return redirect('/');
-    //     dd("404");
-    // }
-    // $post = cache()->remember("posts.{$slug}", now()->addSecond(5), function() use ($path) {
-    //     var_dump('file_get_contents');
-    //     return file_get_contents($path);
-    // });
-
-
-    // return view('post', [
-    //     'post' => $post
-    // ]);
+});
+Route::get('categories/{category}', function (Category $category) {
+    return view(
+        'posts',
+        [
+            'posts' => $category->posts
+        ]
+    );
 });
