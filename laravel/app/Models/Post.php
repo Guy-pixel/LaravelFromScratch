@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+    protected $with=[
+        'category',
+        'author'
+    ];
     protected $fillable = [
         'title',
         'slug',
@@ -25,7 +29,7 @@ class Post extends Model
         // hasOne, hasMany, belongsTo, belongsToMany
         return $this->belongsTo(Category::class);
     }
-    public function author(){
+    public function author(){ // because the relationship is called author, laravel assumes the id will be called 'author_id'
         return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -20,7 +20,8 @@ use App\Models\User;
 
 Route::get('/', function () {
     return view('posts', [
-        'posts' => Post::latest('published_at')->with('category')->with('author')->get()
+        'posts' => Post::latest('published_at')->get(),
+        'categories' => Category::all()
     ]);
 });
 Route::get('posts/{post}', function (Post $post) {
