@@ -7,6 +7,7 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 use Illuminate\Support\Collection;
 use App\Models\Category;
 use App\Models\User;
+use App\Http\Controllers\PostController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,24 +19,8 @@ use App\Models\User;
 |
 */
 
-Route::get('/', function () {
-    $posts=Post::latest();
-    if(request('search')){
-        $posts->where('title', 'like', '%' . request('search') . '%')->orWhere('body', 'like', '%' . request('search') . '%')->orWhere('excerpt', 'like', '%' . request('search') . '%');
-    }
-    return view('posts', [
-        'posts' => $posts->get(),
-        'categories' => Category::all()
-    ]);
-})->name('home');
-Route::get('posts/{post}', function (Post $post) {
-    return view(
-        'post',
-        [
-            'post' => $post
-        ]
-    );
-})->name('post');
+Route::get('/', [PostController::class, 'index'])->name('home');
+Route::get('posts/{post}', [PostController::class, 'show'])->name('post');
 Route::get('categories/{category}', function (Category $category) {
     return view(
         'posts',
