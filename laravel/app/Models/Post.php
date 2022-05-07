@@ -21,15 +21,37 @@ class Post extends Model
         'category_id',
         'user_id'
     ];
-
+    /**
+     * If in the URI filters there is a 'search' tag search in fields title, body and excerpt for this parameter.
+     * @param  $query
+     * @param array $filters
+     */
     public function scopeFilter($query, array $filters)
     {
-        if ($filters['search'] ?? false) {
+        $query->when($filters['search'] ?? false, function ($query, $search){
             $query
                 ->where('title', 'like', '%' . request('search') . '%')
                 ->orWhere('body', 'like', '%' . request('search') . '%')
                 ->orWhere('excerpt', 'like', '%' . request('search') . '%');
-        }
+        });
+        /*
+        we want to create the following sql:
+        SELECT * FROM posts WHERE EXISTS(
+            SELECT * FROM categories
+                WHERE categories.id = posts.categories_id
+                AND categories.slug = 'consequatur-qui-autem-laudantium-est-eveniet
+            )
+        */
+        $query->when($filters['category'] ?? false, function ($query, $category) {
+            $query
+                ->whereExists(fn($query)=>
+                    $query
+                        ->where('category_id', 'posts.category_id')
+                        ->where('categories.slug', $category)
+                );
+        });
+
+            // Post::newQuery()->filter
     }
 
     public function getRouteKeyName()
