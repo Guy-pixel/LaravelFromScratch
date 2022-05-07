@@ -24,7 +24,6 @@ class Post extends Model
 
     public function scopeFilter($query, array $filters)
     {
-        // Post::newQuery()->filter
         if ($filters['search'] ?? false) {
             $query
                 ->where('title', 'like', '%' . request('search') . '%')
